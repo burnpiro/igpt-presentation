@@ -9,8 +9,9 @@
 
   <link rel="stylesheet" href="dist/reset.css">
   <link rel="stylesheet" href="dist/reveal.css">
+  <link rel="stylesheet" href="dist/custom.css">
   <link rel="stylesheet" href="plugin/pointer/pointer.css">
-  <link rel="stylesheet" href="dist/theme/black.css" id="theme">
+  <link rel="stylesheet" href="dist/theme/serif.css" id="theme">
 
   <!-- Theme used for syntax highlighting of code -->
   <link rel="stylesheet" href="css/highlight/isbl-editor-light.css">
@@ -18,33 +19,309 @@
 <body>
 <div class="reveal">
   <div class="slides">
-    <section>
-      <h2>Presentation </h2>
-      <h5>("Q" for pointer)</h5>
-      <small>Authors...</small>
+    <section data-menu-title="Start">
+      <span class="heading">imageGPT</span><br/>
+      <a href="https://cdn.openai.com/papers/Generative_Pretraining_from_Pixels_V2.pdf" class="heading-secondary">Generative Pretraining From Pixels</a><br/>
+      <small>Author: Kemal Erdem</small>
+    </section>
+    <section data-menu-title="iGPT autoaggressive examples">
+      <span class="heading-secondary">What iGPT is not?</span>
+      <figure>
+        <img src="assets/igpt-example.png">
+        <figcaption>iGPT autoaggressive examples, Source: <a href="https://openai.com/blog/image-gpt/">https://openai.com/blog/image-gpt/</a></figcaption>
+      </figure>
+    </section>
+    <section data-menu-title="The reason for iGPT">
+      <span class="heading-secondary">If it's not about generating images then what?</span>
+      <figure>
+        <table class="table-compact mt-1">
+          <thead>
+          <tr>
+            <th style="border-bottom:none"></th>
+            <th style="border-bottom:none"></th>
+            <th style="border-bottom:none"></th>
+            <th style="border-bottom:none" colspan="2" class="text-right">Pre-trained on ImageNet</th>
+          </tr>
+          <tr>
+            <th style="width:33.333%;min-width:6rem">Evaluation</th>
+            <th style="width:33.333%;min-width:6rem">Model</th>
+            <th style="width:11.111%;min-width:6rem" class="text-right">Accuracy</th>
+            <th style="width:11.111%" class="text-right">w/o labels</th>
+            <th style="width:11.111%" class="text-right">w/ labels</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td rowspan="3">CIFAR-10<br>Linear Probe</td>
+            <td>ResNet-152<span class="js-rfref" data-id="kornblith-2019-better"><sup class="reference-ref"><a target="_blank" href="http://openaccess.thecvf.com/content_CVPR_2019/html/Kornblith_Do_Better_ImageNet_Models_Transfer_Better_CVPR_2019_paper.html" id="rfref50">paper</a></sup></span></td>
+            <td class="text-right">94.0</td>
+            <td class="text-right"></td>
+            <td class="text-right">✓</td>
+          </tr>
+          <tr>
+            <td>SimCLR<span class="js-rfref" data-id="chen-2020-simple"><sup class="reference-ref"><a target="_blank" href="https://arxiv.org/abs/2002.05709" id="rfref12e">paper</a></sup></span></td>
+            <td class="text-right">95.3</td>
+            <td class="text-right">✓</td>
+            <td class="text-right"></td>
+          </tr>
+          <tr>
+            <td style="background-color:#ccc !important">iGPT-L 32x32</td>
+            <td style="background-color:#ccc !important" class="text-right"><strong>96.3</strong></td>
+            <td style="background-color:#ccc !important" class="text-right">✓</td>
+            <td style="background-color:#ccc !important" class="text-right"></td>
+          </tr>
+          <tr>
+            <td rowspan="3">CIFAR-100<br>Linear Probe</td>
+            <td>ResNet-152</td>
+            <td class="text-right">78.0</td>
+            <td class="text-right"></td>
+            <td class="text-right">✓</td>
+          </tr>
+          <tr>
+            <td>SimCLR</td>
+            <td class="text-right">80.2</td>
+            <td class="text-right">✓</td>
+            <td class="text-right"></td>
+          </tr>
+          <tr>
+            <td style="background-color:#ccc !important">iGPT-L 32x32</td>
+            <td style="background-color:#ccc !important" class="text-right"><strong>82.8</strong></td>
+            <td style="background-color:#ccc !important" class="text-right">✓</td>
+            <td style="background-color:#ccc !important" class="text-right"></td>
+          </tr>
+          <tr>
+            <td rowspan="2" class="td-strong">STL-10<br>Linear Probe</td>
+            <td>AMDIM-L<span class="js-rfref" data-id="bachman-2019-learning"><sup class="reference-ref"><a target="_blank" href="http://papers.nips.cc/paper/9686-learning-representations-by-maximizing-mutual-information-across-views" id="rfref13d">paper</a></sup></span></td>
+            <td class="text-right">94.2</td>
+            <td class="text-right">✓</td>
+            <td class="text-right"></td>
+          </tr>
+          <tr>
+            <td style="background-color:#ccc !important" class="td-strong">iGPT-L 32x32</td>
+            <td style="background-color:#ccc !important" class="td-strong text-right"><strong>95.5</strong></td>
+            <td style="background-color:#ccc !important" class="td-strong text-right">✓</td>
+            <td style="background-color:#ccc !important" class="td-strong text-right"></td>
+          </tr>
+          <tr>
+            <td rowspan="4">CIFAR-10<br>Fine-tune</td>
+            <td>AutoAugment<span class="js-rfref" data-id="cubuk-2019-autoaugment"><sup class="reference-ref"><a target="_blank" href="#http://openaccess.thecvf.com/content_CVPR_2019/html/Cubuk_AutoAugment_Learning_Augmentation_Strategies_From_Data_CVPR_2019_paper.html" id="rfref51">paper</a></sup></span></td>
+            <td class="text-right">98.5</td>
+            <td class="text-right"></td>
+            <td class="text-right">✓</td>
+          </tr>
+          <tr>
+            <td>SimCLR</td>
+            <td class="text-right">98.6</td>
+            <td class="text-right">✓</td>
+            <td class="text-right"></td>
+          </tr>
+          <tr>
+            <td>GPipe<span class="js-rfref" data-id="huang-2019-gpipe"><sup class="reference-ref"><a target="_blank" href="http://papers.nips.cc/paper/8305-gpipe-efficient-training-of-giant-neural-networks-using-pipeline-parallelism" id="rfref15b">paper</a></sup></span></td>
+            <td class="text-right"><strong>99.0</strong></td>
+            <td class="text-right"></td>
+            <td class="text-right">✓</td>
+          </tr>
+          <tr>
+            <td style="background-color:#ccc !important">iGPT-L</td>
+            <td style="background-color:#ccc !important" class="text-right"><strong>99.0</strong></td>
+            <td style="background-color:#ccc !important" class="text-right">✓</td>
+            <td style="background-color:#ccc !important" class="text-right"></td>
+          </tr>
+          <tr>
+            <td rowspan="4">CIFAR-100<br>Fine-tune</td>
+            <td style="background-color:#ccc !important">iGPT-L</td>
+            <td style="background-color:#ccc !important" class="text-right">88.5</td>
+            <td style="background-color:#ccc !important" class="text-right">✓</td>
+            <td style="background-color:#ccc !important" class="text-right"></td>
+          </tr>
+          <tr>
+            <td>SimCLR</td>
+            <td class="text-right">89.0</td>
+            <td class="text-right">✓</td>
+            <td class="text-right"></td>
+          </tr>
+          <tr>
+            <td>AutoAugment</td>
+            <td class="text-right">89.3</td>
+            <td class="text-right"></td>
+            <td class="text-right">✓</td>
+          </tr>
+          <tr>
+            <td>EfficientNet<span class="js-rfref" data-id="tan-2019-efficientnet"><sup class="reference-ref"><a target="_blank" href="https://arxiv.org/abs/1905.11946" id="rfref52">paper</a></sup></span></td>
+            <td class="text-right"><strong>91.7</strong></td>
+            <td class="text-right"></td>
+            <td class="text-right">✓</td>
+          </tr>
+          </tbody>
+        </table>
+        <figcaption style="margin-top: 5px">A comparison of linear probe and fine-tune accuracies, Source: <a href="https://openai.com/blog/image-gpt/">OpenAI iGPT</a></figcaption>
+      </figure>
+    </section>
+    <section data-menu-title="Training problem">
+      <span class="heading-secondary">Training process (2048 TPU cores)</span><br/>
+      <figure>
+        <span class="heading-tertiary">Problem with attending over an entire image</span>
+        <img src="assets/self-attention-matrix-calculation-2.png">
+        <figcaption>The self-attention calculation in matrix form, Source: <a href="http://jalammar.github.io/illustrated-transformer/">The Illustrated Transformer by Jay Alammar</a></figcaption>
+      </figure>
+    </section>
+    <section data-menu-title="Scaling the input">
+      <span class="heading-secondary">Input scaling with 9bit color palette</span><br/>
+      <figure>
+        <img src="assets/scaled-input.png" style="height: 50vh">
+        <figcaption>Input preprocessing, Source: <a href="https://cdn.openai.com/papers/Generative_Pretraining_from_Pixels_V2.pdf">Generative Pretraining From Pixels</a></figcaption>
+      </figure>
+    </section>
+    <section data-menu-title="True color encoding example">
+      <span class="heading-secondary">How color encoding works in practice?</span>
+      <img src="assets/igpt-colors.png">
+    </section>
+    <section data-menu-title="Training process">
+      <span class="heading-secondary">How to train it?</span><br/>
+      <figure>
+        <img src="assets/training.png">
+        <figcaption>Training process, Source: <a href="https://cdn.openai.com/papers/Generative_Pretraining_from_Pixels_V2.pdf">Generative Pretraining From Pixels</a></figcaption>
+      </figure>
+    </section>
+    <section data-menu-title="Classification methods">
+      <span class="heading-secondary">Classification methods</span><br/>
+      <figure>
+        <img src="assets/preds.png" style="height: 50vh">
+        <figcaption>Source: <a href="https://cdn.openai.com/papers/Generative_Pretraining_from_Pixels_V2.pdf">Generative Pretraining From Pixels</a></figcaption>
+      </figure>
+    </section>
+    <section data-menu-title="Layer performance difference">
+      <span class="heading-secondary">Results using linear probe</span><br/>
+      <figure>
+        <img src="assets/acc-from-layer.png">
+        <figcaption>Linear probe results from iGPT-L model, Source: <a href="https://cdn.openai.com/papers/Generative_Pretraining_from_Pixels_V2.pdf">Generative Pretraining From Pixels</a></figcaption>
+      </figure>
+    </section>
+    <section data-menu-title="Layer performance difference">
+      <span class="heading-secondary">Results using linear probe</span><br/>
+      <figure>
+        <table class="table-compact" style="font-size: 1.3rem">
+          <thead>
+          <tr>
+            <th style="width:20%;min-width:6rem">Method</th>
+            <th style="width:20%;min-width:6rem">Input Resolution</th>
+            <th style="width:20%;min-width:6rem" class="text-right">Features</th>
+            <th style="width:20%;min-width:6rem" class="text-right">Parameters</th>
+            <th style="width:20%;min-width:6rem" class="text-right">Accuracy</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Rotation<span class="js-rfref" data-id="gidaris-2018-unsupervised"><sup class="reference-ref"><a href="https://arxiv.org/abs/1803.07728" id="rfref53">paper</a></sup></span></td>
+            <td>original</td>
+            <td class="text-right">8192</td>
+            <td class="text-right">86M</td>
+            <td class="text-right">55.4</td>
+          </tr>
+          <tr style="background-color:#ccc">
+            <td>iGPT-L</td>
+            <td>32x32x3</td>
+            <td class="text-right">1536</td>
+            <td class="text-right">1362M</td>
+            <td class="text-right">60.3</td>
+          </tr>
+          <tr>
+            <td>BigBiGAN<span class="js-rfref" data-id="donahue-2019-large"><sup class="reference-ref"><a href="http://papers.nips.cc/paper/9240-large-scale-adversarial-representation-learning" id="rfref37b">paper</a></sup></span></td>
+            <td>original</td>
+            <td class="text-right">16384</td>
+            <td class="text-right">86M</td>
+            <td class="text-right">61.3</td>
+          </tr>
+          <tr style="background-color:#ccc">
+            <td>iGPT-L</td>
+            <td>48x48x3</td>
+            <td class="text-right">1536</td>
+            <td class="text-right">1362M</td>
+            <td class="text-right">65.2</td>
+          </tr>
+          <tr>
+            <td>AMDIM<span class="js-rfref" data-id="bachman-2019-learning"><sup class="reference-ref"><a href="http://papers.nips.cc/paper/9686-learning-representations-by-maximizing-mutual-information-across-views" id="rfref13e">paper</a></sup></span></td>
+            <td>original</td>
+            <td class="text-right">8192</td>
+            <td class="text-right">626M</td>
+            <td class="text-right">68.1</td>
+          </tr>
+          <tr>
+            <td>MoCo<span class="js-rfref" data-id="he-2019-momentum"><sup class="reference-ref"><a href="#https://arxiv.org/abs/1911.05722" id="rfref24d">paper</a></sup></span></td>
+            <td>original</td>
+            <td class="text-right">8192</td>
+            <td class="text-right">375M</td>
+            <td class="text-right">68.6</td>
+          </tr>
+          <tr style="background-color:#ccc !important">
+            <td>iGPT-XL</td>
+            <td>64x64x3</td>
+            <td class="text-right">3072</td>
+            <td class="text-right">6801M</td>
+            <td class="text-right">68.7</td>
+          </tr>
+          <tr>
+            <td>SimCLR<span class="js-rfref" data-id="chen-2020-simple"><sup class="reference-ref"><a href="https://arxiv.org/abs/2002.05709" id="rfref12f">paper</a></sup></span></td>
+            <td>original</td>
+            <td class="text-right">2048</td>
+            <td class="text-right">24M</td>
+            <td class="text-right">69.3</td>
+          </tr>
+          <tr>
+            <td>CPC v2<span class="js-rfref" data-id="henaff-2019-data"><sup class="reference-ref"><a href="https://arxiv.org/abs/1905.09272" id="rfref25d">paper</a></sup></span></td>
+            <td>original</td>
+            <td class="text-right">4096</td>
+            <td class="text-right">303M</td>
+            <td class="text-right">71.5</td>
+          </tr>
+          <tr style="background-color:#ccc !important">
+            <td>iGPT-XL</td>
+            <td>64x64x3</td>
+            <td class="text-right">3072 x 5</td>
+            <td class="text-right">6801M</td>
+            <td class="text-right">72.0</td>
+          </tr>
+          <tr>
+            <td>SimCLR</td>
+            <td>original</td>
+            <td class="text-right">8192</td>
+            <td class="text-right">375M</td>
+            <td class="text-right"><strong>76.5</strong></td>
+          </tr>
+          </tbody>
+        </table>
+        <figcaption>Linear probe results from different models against SOTA self-supervised models, Source: <a href="https://cdn.openai.com/papers/Generative_Pretraining_from_Pixels_V2.pdf">Generative Pretraining From Pixels</a></figcaption>
+      </figure>
+    </section>
+    <section data-menu-title="Accuracy and model size">
+      <span class="heading-secondary">Accuracy and model size dependency</span><br/>
+      <figure>
+        <img src="assets/acc-val-loss.png">
+        <figcaption>Validation generative loss, each model has a checkpoint at <strong>65K, 131K, 262K, 524K, and 1000K steps</strong>, Source: <a href="https://cdn.openai.com/papers/Generative_Pretraining_from_Pixels_V2.pdf">Generative Pretraining From Pixels</a></figcaption>
+      </figure>
     </section>
     <section>
-      <h2>Slide 1</h2>
-      <p>
-        ABC
-        $$
-        a_b
-        $$
-      </p>
-      <pre><code data-trim data-noescape>
-(def lazy-fib
-  (concat
-   [0 1]
-   ((fn rfib [a b]
-        (lazy-cons (+ a b) (rfib b (+ a b)))) 0 1)))
-  </code></pre>
+      <span>Autoaggressive image generation</span>
+      <img src="assets/sample-random.png" style="height: 60vh">
+    </section>
+    <section>
+      <span>Autoaggressive image generation with primer</span>
+      <img src="assets/sample-primer.png" style="height: 60vh">
+    </section>
+    <section>
+      <span>Autoaggressive image generation with primer</span>
+      <img src="assets/yoda-gen.png">
+    </section>
+    <section>
+      <span>Resolution enhancement using <a href="https://github.com/xinntao/ESRGAN">ESRGAN</a></span>
+      <img src="assets/yoda-ench.png">
     </section>
     <section>
       <h2>Thanks</h2>
       <blockquote>"There's no such thing as a stupid question!"</blockquote>
       <p>
-        <small>Authors</small><br/>
-        <small><a href="">Links</a></small><br/>
+        <small>Author: Kemal Erdem</small><br/>
+        <small>Check out the code and generate your own images:<br/> <a href="https://github.com/burnpiro/image-gpt">https://github.com/burnpiro/image-gpt</a></small><br/>
       </p>
     </section>
   </div>
@@ -68,7 +345,7 @@
     hash: true,
     controls: true,
     progress: true,
-    slideNumber: false,
+    slideNumber: true,
     overview: true,
     center: true,
     navigationMode: 'default',
@@ -92,9 +369,11 @@
     },
     menu: {
       themes: [
-        { name: 'Black', theme: 'dist/theme/black.css' },
-        { name: 'Moon', theme: 'dist/theme/moon.css' },
+        { name: 'Default', theme: 'dist/theme/serif.css' },
+        { name: 'Dark', theme: 'dist/theme/blood.css' },
         { name: 'Simple', theme: 'dist/theme/simple.css' },
+        { name: 'Night', theme: 'dist/theme/night.css' },
+        { name: 'Blue', theme: 'dist/theme/sky.css' },
       ]
     },
     pointer: {
